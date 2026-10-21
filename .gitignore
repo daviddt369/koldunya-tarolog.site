@@ -1,0 +1,13 @@
+node_modules/
+dist/
+.taste-skill/
+.impeccable/cache/
+.lighthouseci/
+*.log
+.DS_Store
+Thumbs.db
+
+# исходники заказчика (тяжёлые, не публикуются)
+/Изабелла/
+/media/_tmp/
+/media/manifest*.json

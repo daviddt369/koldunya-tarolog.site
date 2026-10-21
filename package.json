@@ -1,0 +1,20 @@
+{
+  "name": "koldunya-tarolog-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Изабелла — экстрасенс, маг, чернокнижник. Статический сайт.",
+  "type": "module",
+  "scripts": {
+    "media": "node tools/build-media.mjs",
+    "build": "node tools/build.mjs",
+    "check": "node tools/check.mjs",
+    "dev": "node tools/serve.mjs"
+  },
+  "devDependencies": {
+    "esbuild": "^0.25.0",
+    "ffmpeg-static": "^5.2.0",
+    "ffprobe-static": "^3.1.0",
+    "playwright-core": "^1.64.1",
+    "sharp": "^0.34.0"
+  }
+}
