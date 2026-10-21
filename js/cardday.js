@@ -1,7 +1,7 @@
 // Карта дня: затемнение → видео-вступление → появление карты → переворот → название и значение.
 import { TAROT, waLink } from './data.js';
-import { hub } from './media-hub.js';
-import { openModal } from './modal.js';
+import { hub, reducedMotion } from './media-hub.js';
+import { isModalOpen, openModal, closeModal } from './modal.js';
 
 const G = '#c9a15a';
 const GH = '#e8cd8f';
@@ -72,6 +72,7 @@ export function initCardDay() {
   const stage = modal.querySelector('.cm-stage');
   const video = document.getElementById('cmVideo');
   const skip = document.getElementById('cmSkip');
+  const soundBtn = document.getElementById('cmSound');
   const tarot = document.getElementById('tarot');
   const front = document.getElementById('tarotFront');
   const meaning = document.getElementById('cmMeaning');
@@ -81,10 +82,13 @@ export function initCardDay() {
 
   hub.register('card-video', () => video.pause());
 
+  const syncSound = () => { soundBtn.hidden = !(video.muted && !video.paused && stage.dataset.stage === 'intro'); };
+
   function reveal() {
     if (stage.dataset.stage === 'card') return;
     video.pause();
     stage.dataset.stage = 'card';
+    syncSound();
     later(() => tarot.classList.add('flipped'), 1100);
     later(() => meaning.classList.add('shown'), 2300);
     skip.blur();
@@ -95,6 +99,7 @@ export function initCardDay() {
     video.pause();
     video.removeAttribute('src');
     video.load();
+    soundBtn.hidden = true;
   }
 
   function open() {
@@ -102,26 +107,81 @@ export function initCardDay() {
     front.innerHTML = faceSVG(card);
     document.getElementById('cmName').textContent = card.name;
     document.getElementById('cmText').textContent = card.text;
-    document.getElementById('cmDate').textContent = `Карта дня · ${new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' })}`;
+    document.getElementById('cmDate').textContent = new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
     document.getElementById('cmCta').href = waLink(`Здравствуйте, Изабелла! Моя карта дня — «${card.name}». Хочу узнать, что она значит для меня.`);
     clear();
     tarot.classList.remove('flipped');
     meaning.classList.remove('shown');
     stage.dataset.stage = 'intro';
+    soundBtn.hidden = true;
     video.muted = false;
     video.src = './media/special/card-day.mp4';
     openModal(modal, { onClose });
     hub.claim('card-video');
     const p = video.play();
     if (p && p.catch) p.catch(() => {
-      video.muted = true; // автозапуск со звуком не разрешён — пробуем без звука
+      // браузер не разрешил звук без действия пользователя — запускаем без звука, звук включается кнопкой
+      video.muted = true;
       const q = video.play();
       if (q && q.catch) q.catch(() => {});
     });
   }
 
   video.addEventListener('ended', reveal);
+  video.addEventListener('playing', syncSound);
+  video.addEventListener('volumechange', syncSound);
   skip.addEventListener('click', reveal);
+  soundBtn.addEventListener('click', () => { video.muted = false; video.volume = 1; syncSound(); });
   video.addEventListener('click', () => (video.paused ? video.play() : video.pause()));
-  document.querySelectorAll('[data-open-card]').forEach((b) => b.addEventListener('click', open));
+  // клик по свободному полю вокруг содержимого закрывает окно
+  stage.addEventListener('click', (e) => { if (e.target === stage) closeModal(); });
+
+  // Ритуал перед открытием: три карты тасуются, затем открывается окно
+  const deck = document.querySelector('.deck');
+  let shuffling = false;
+  const SHUFFLE_AUTO = 3000;
+  const SHUFFLE_MANUAL = 1600;
+  function ritual(ms, guard) {
+    if (shuffling) return;
+    if (reducedMotion.matches || !deck) { if (!guard || guard()) open(); return; }
+    shuffling = true;
+    deck.classList.add('shuffling');
+    setTimeout(() => {
+      deck.classList.remove('shuffling');
+      shuffling = false;
+      if (guard && !guard()) return;
+      open();
+    }, ms);
+  }
+  document.querySelectorAll('[data-open-card]').forEach((b) => b.addEventListener('click', () => ritual(SHUFFLE_MANUAL)));
+
+  // Автооткрытие: один раз за сессию вкладки, когда посетитель реально дошёл до секции
+  const KEY = 'cardDayAutoShown';
+  const seen = () => { try { return sessionStorage.getItem(KEY) === '1'; } catch { return autoDone; } };
+  let autoDone = false;
+  const section = document.getElementById('card-day');
+  if (!section || seen()) return;
+  let timer = 0;
+  const visibleNow = () => {
+    const r = section.getBoundingClientRect();
+    const h = Math.min(r.bottom, window.innerHeight) - Math.max(r.top, 0);
+    return h >= Math.min(r.height, window.innerHeight) * 0.55;
+  };
+  const io = new IntersectionObserver((entries) => {
+    const e = entries[entries.length - 1];
+    clearTimeout(timer);
+    if (!e.isIntersecting || autoDone || shuffling) return;
+    timer = setTimeout(() => {
+      if (autoDone || isModalOpen() || shuffling || !visibleNow()) return; // откроем при следующем заходе
+      // карты тасуются; если за это время секцию пролистали — окно не открываем и не «тратим» автооткрытие
+      ritual(SHUFFLE_AUTO, () => {
+        if (isModalOpen() || !visibleNow()) return false;
+        autoDone = true;
+        try { sessionStorage.setItem(KEY, '1'); } catch { /* ignore */ }
+        io.disconnect();
+        return true;
+      });
+    }, 600);
+  }, { threshold: [0, 0.2, 0.4, 0.55, 0.7, 1] });
+  io.observe(section);
 }

@@ -18,6 +18,7 @@ node tools/qa.mjs      # автотесты в Chrome (нужен запущен
 ## Структура
 
 - `index.html`, `styles.css` — разметка и оформление; `js/` — модули: `media-hub` (единый звук), `modal`, `voice`, `orbs`, `flow` (3D-галерея), `carousel`, `cardday`, `fx` (пепел, свет, скример), `ui`.
+- Скорость вращения 3D-карусели и ленты фотоотзывов: `FLOW_CONFIG.secondsPerTurn` в `js/flow.js` (или атрибут `data-seconds-per-turn` у `#flow`), `CAROUSEL_CONFIG.pxPerSecond` в `js/carousel.js`.
 - `js/data.js` — контакты, обряды и их «направления», карты Таро.
 - `media/` — оптимизированные материалы; `Изабелла/` — оригиналы заказчика (не коммитятся, не изменяются); `MEDIA-MAP.md` — карта «файл → назначение → секция».
 - `fonts/` — Cormorant Garamond и Ruslan Display (OFL), подключены локально.

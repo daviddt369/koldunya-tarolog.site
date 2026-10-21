@@ -27,7 +27,7 @@ const copy = (from, to) => {
 copy('media', `${OUT}/media`);
 fs.mkdirSync(`${OUT}/fonts`, { recursive: true });
 for (const f of fs.readdirSync('fonts')) if (f.endsWith('.woff2')) copy(`fonts/${f}`, `${OUT}/fonts/${f}`);
-for (const f of ['favicon.svg', 'robots.txt', 'sitemap.xml', 'CNAME', '.nojekyll']) if (fs.existsSync(f)) copy(f, `${OUT}/${f}`);
+for (const f of ['favicon.svg', 'favicon.ico', 'favicon-32.png', 'icon-192.png', 'icon-512.png', 'apple-touch-icon.png', 'robots.txt', 'sitemap.xml', 'CNAME', '.nojekyll']) if (fs.existsSync(f)) copy(f, `${OUT}/${f}`);
 
 const size = (p) => (fs.statSync(p).size / 1024).toFixed(1) + ' KB';
 console.log(`dist/app.js ${size(`${OUT}/app.js`)}, dist/styles.css ${size(`${OUT}/styles.css`)}, index.html ${size(`${OUT}/index.html`)}`);

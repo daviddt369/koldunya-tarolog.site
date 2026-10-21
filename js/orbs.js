@@ -3,6 +3,7 @@ import { RITUALS, waLink } from './data.js';
 import { reducedMotion, saveData } from './media-hub.js';
 import { isModalOpen } from './modal.js';
 import { openVideo } from './video-modal.js';
+import { initOrbFx } from './orb-fx.js';
 
 const MAX_LIVE = window.innerWidth < 700 ? 6 : 8;
 const DESC = 'Каждая судьба индивидуальна. Каждый случай требует особого подхода.';
@@ -16,7 +17,6 @@ export function initOrbs() {
     (r) => `
     <li class="orb-card" data-slug="${r.slug}">
       <button class="orb" type="button" aria-label="Открыть обряд «${r.title}» со звуком">
-        <span class="orb-sparks" aria-hidden="true"><i></i><i></i><i></i></span>
         <span class="orb-ring" aria-hidden="true"></span>
         <span class="orb-inner">
           <img src="./media/rituals/${r.slug}-orb.webp" width="320" height="320" alt="" loading="lazy" decoding="async">
@@ -46,6 +46,8 @@ export function initOrbs() {
     const card = e.target.closest('.orb-card');
     if (card && e.target.closest('.orb, .orb-more')) open(card.dataset.slug);
   });
+
+  initOrbFx(grid);
 
   if (reducedMotion.matches || saveData()) return; // остаются постеры
 

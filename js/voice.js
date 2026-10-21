@@ -17,7 +17,7 @@ export function initVoice() {
 
   const setPlaying = (on) => {
     root.classList.toggle('playing', on);
-    btn.setAttribute('aria-label', on ? 'Пауза' : 'Слушать голос Изабеллы');
+    btn.setAttribute('aria-label', on ? 'Пауза' : 'Слушать: обо мне');
   };
 
   function fade(to, ms, done) {
@@ -26,7 +26,7 @@ export function initVoice() {
     const t0 = performance.now();
     const step = (t) => {
       const k = Math.min(1, (t - t0) / ms);
-      audio.volume = from + (to - from) * k;
+      audio.volume = Math.min(1, Math.max(0, from + (to - from) * k));
       if (k < 1) fadeId = requestAnimationFrame(step);
       else if (done) done();
     };

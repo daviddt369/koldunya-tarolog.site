@@ -1,5 +1,5 @@
 // Атмосфера: пепел, свет за курсором, параллакс, зеркало, режим усиленного хоррора и редкий скример.
-import { hub, reducedMotion } from './media-hub.js';
+import { reducedMotion } from './media-hub.js';
 import { isModalOpen } from './modal.js';
 
 const fine = window.matchMedia('(hover: hover) and (pointer: fine)');
@@ -98,114 +98,40 @@ export function initLightAndParallax() {
 /* ---------- зеркало ---------- */
 export function initMirror() {
   const mirror = document.getElementById('mirror');
+  const halo = document.getElementById('mirrorHalo');
   if (!mirror) return;
+  const touchOnly = window.matchMedia('(hover: none)');
   let t = 0;
-  const flash = (ms = 1500) => {
-    mirror.classList.add('active');
+  const set = (on) => {
+    if (on) mirror.classList.remove('blink'); // наведение/касание важнее самостоятельного мигания
+    mirror.classList.toggle('active', on);
+    mirror.setAttribute('aria-pressed', String(on));
+    if (halo) halo.classList.toggle('on', on);
+  };
+  const flash = (ms) => {
+    set(true);
     clearTimeout(t);
-    t = setTimeout(() => mirror.classList.remove('active'), ms);
+    t = setTimeout(() => set(false), ms);
   };
-  mirror.addEventListener('click', () => flash(1800));
-  document.addEventListener('mirror:flash', () => flash(900));
-}
+  mirror.addEventListener('pointerenter', () => mirror.classList.remove('blink'));
+  mirror.addEventListener('click', () => {
+    if (halo) halo.classList.add('used'); // подсказка-мерцание на сенсорных экранах больше не нужна
+    // касание: первое показывает отражение и держит его, повторное убирает; мышь: короткая вспышка (основное — наведение)
+    if (touchOnly.matches) { if (mirror.classList.contains('active')) { clearTimeout(t); set(false); } else flash(7000); }
+    else flash(1800);
+  });
 
-/* ---------- усиленный хоррор + скример ---------- */
-export function initHorror() {
-  const toggle = document.getElementById('horrorToggle');
-  const scare = document.getElementById('scare');
-  const face = scare.querySelector('.scare-face');
-  const MAX = 3;
-  let timer = 0;
-  let mirrorTimer = 0;
-  let count = 0;
-  let audioCtx = null;
-
-  const store = {
-    get() { try { return localStorage.getItem('horror') === '1'; } catch { return false; } },
-    set(v) { try { localStorage.setItem('horror', v ? '1' : '0'); } catch { /* ignore */ } },
-  };
-
-  function sound() {
-    if (!audioCtx || audioCtx.state !== 'running') return;
-    const t = audioCtx.currentTime;
-    const master = audioCtx.createGain();
-    master.gain.setValueAtTime(0.0001, t);
-    master.gain.exponentialRampToValueAtTime(0.22, t + 0.03);
-    master.gain.exponentialRampToValueAtTime(0.0001, t + 0.7);
-    master.connect(audioCtx.destination);
-    const osc = audioCtx.createOscillator();
-    osc.type = 'sawtooth';
-    osc.frequency.setValueAtTime(140, t);
-    osc.frequency.exponentialRampToValueAtTime(38, t + 0.6);
-    const lp = audioCtx.createBiquadFilter();
-    lp.type = 'lowpass';
-    lp.frequency.value = 420;
-    osc.connect(lp).connect(master);
-    osc.start(t);
-    osc.stop(t + 0.7);
-    const buf = audioCtx.createBuffer(1, audioCtx.sampleRate * 0.4, audioCtx.sampleRate);
-    const d = buf.getChannelData(0);
-    for (let i = 0; i < d.length; i += 1) d[i] = (Math.random() * 2 - 1) * (1 - i / d.length);
-    const noise = audioCtx.createBufferSource();
-    noise.buffer = buf;
-    const hp = audioCtx.createBiquadFilter();
-    hp.type = 'highpass';
-    hp.frequency.value = 1800;
-    noise.connect(hp).connect(master);
-    noise.start(t);
-  }
-
-  function canScare() {
-    return !reducedMotion.matches && !document.hidden && !isModalOpen() && !hub.isBusy();
-  }
-  function doScare() {
-    scare.classList.toggle('red', Math.random() < 0.4);
-    scare.hidden = false;
-    face.style.animation = 'none';
-    void face.offsetWidth;
-    face.style.animation = '';
-    face.style.backgroundPosition = Math.random() < 0.5 ? '17% 12%' : '17% 14%';
-    sound();
-    setTimeout(() => { scare.hidden = true; }, 640);
-  }
-  function schedule() {
-    clearTimeout(timer);
-    if (!document.documentElement.classList.contains('horror') || count >= MAX) return;
-    timer = setTimeout(() => {
-      if (canScare()) { doScare(); count += 1; }
-      schedule();
-    }, 40000 + Math.random() * 50000);
-  }
-  function scheduleMirror() {
-    clearInterval(mirrorTimer);
-    if (!document.documentElement.classList.contains('horror') || reducedMotion.matches) return;
-    mirrorTimer = setInterval(() => {
-      const r = document.getElementById('heroFigure')?.getBoundingClientRect();
-      if (r && r.bottom > 0 && r.top < window.innerHeight && !isModalOpen()) document.dispatchEvent(new Event('mirror:flash'));
-    }, 18000);
-  }
-
-  function set(on, byUser) {
-    document.documentElement.classList.toggle('horror', on);
-    toggle.setAttribute('aria-pressed', String(on));
-    store.set(on);
-    if (on) {
-      if (byUser) {
-        try {
-          audioCtx = audioCtx || new (window.AudioContext || window.webkitAudioContext)();
-          audioCtx.resume();
-        } catch { audioCtx = null; }
-        document.dispatchEvent(new Event('mirror:flash'));
-        document.dispatchEvent(new CustomEvent('toast', { detail: 'Усиленный хоррор включён. Иногда из тьмы будет выглядывать она.' }));
-      }
-      schedule();
-      scheduleMirror();
-    } else {
-      clearTimeout(timer);
-      clearInterval(mirrorTimer);
-      if (byUser) document.dispatchEvent(new CustomEvent('toast', { detail: 'Усиленный хоррор выключен.' }));
+  // Отражение само «мигает» время от времени — без наведения и касания
+  let bt = 0;
+  const blink = () => {
+    const fig = document.getElementById('heroFigure');
+    const r = fig && fig.getBoundingClientRect();
+    if (r && r.bottom > 80 && r.top < window.innerHeight * 0.85 && !document.hidden && !isModalOpen() && !mirror.classList.contains('active')) {
+      mirror.classList.add('blink');
+      if (halo) halo.classList.add('on');
+      setTimeout(() => { mirror.classList.remove('blink'); if (halo && !mirror.classList.contains('active')) halo.classList.remove('on'); }, 2400);
     }
-  }
-  toggle.addEventListener('click', () => set(toggle.getAttribute('aria-pressed') !== 'true', true));
-  if (store.get()) set(true, false);
+    bt = setTimeout(blink, 5500 + Math.random() * 4500);
+  };
+  if (!reducedMotion.matches) bt = setTimeout(blink, 2600);
 }

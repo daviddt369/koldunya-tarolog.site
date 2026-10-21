@@ -1,18 +1,21 @@
 import { initUI } from './ui.js';
-import { initAsh, initLightAndParallax, initMirror, initHorror } from './fx.js';
+import { initAsh, initLightAndParallax, initMirror } from './fx.js';
 import { initVoice } from './voice.js';
 import { initOrbs } from './orbs.js';
 import { initFlow } from './flow.js';
 import { initCarousel } from './carousel.js';
 import { initCardDay } from './cardday.js';
+import { initGreeting } from './greeting.js';
+import { initRating } from './rating.js';
 
 initUI();
 initAsh();
 initLightAndParallax();
 initMirror();
-initHorror();
 initVoice();
 initOrbs();
 initFlow();
 initCarousel();
 initCardDay();
+initGreeting();
+initRating();

@@ -1,6 +1,7 @@
 // Крупное видео в модальном окне (обряд / видеоотзыв / приветствие) — со звуком.
 import { hub } from './media-hub.js';
 import { openModal } from './modal.js';
+import { likeRowHTML, syncLikes } from './rating.js';
 
 const modal = document.getElementById('videoModal');
 const panel = document.getElementById('vmPanel');
@@ -40,6 +41,11 @@ export function openVideo(o) {
   info.hidden = solo;
   // название остаётся доступным для скринридера и в «solo»-режиме
   modal.setAttribute('aria-label', o.title);
+
+  const likeBox = document.getElementById('vmLikeBox');
+  likeBox.hidden = !o.likeKey;
+  likeBox.innerHTML = o.likeKey ? likeRowHTML(o.likeKey, 'Нравится отзыв') : '';
+  if (o.likeKey) syncLikes();
 
   video.muted = false;
   video.volume = 1;

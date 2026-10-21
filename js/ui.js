@@ -1,6 +1,4 @@
-// Интерфейс: шапка, меню, проявление блоков, копирование номера, видеоприветствие.
-import { CONTACT } from './data.js';
-import { openVideo } from './video-modal.js';
+// Интерфейс: шапка, меню, проявление блоков.
 
 export function initUI() {
   const header = document.getElementById('siteHeader');
@@ -44,46 +42,4 @@ export function initUI() {
     }
   }, { threshold: 0.35 });
   document.querySelectorAll('.old-frame').forEach((el) => photoIo.observe(el));
-
-  // тост
-  const toast = document.getElementById('toast');
-  let tt = 0;
-  const show = (msg) => {
-    toast.textContent = msg;
-    toast.classList.add('show');
-    clearTimeout(tt);
-    tt = setTimeout(() => toast.classList.remove('show'), 3800);
-  };
-  document.addEventListener('toast', (e) => show(e.detail));
-
-  // Telegram: прямой переход по номеру может не открыться (зависит от приватности) — есть копирование номера
-  document.getElementById('copyTg').addEventListener('click', async () => {
-    const num = CONTACT.phoneTel;
-    try {
-      await navigator.clipboard.writeText(num);
-    } catch {
-      const ta = document.createElement('textarea');
-      ta.value = num;
-      ta.setAttribute('readonly', '');
-      ta.style.cssText = 'position:fixed;opacity:0';
-      document.body.appendChild(ta);
-      ta.select();
-      try { document.execCommand('copy'); } catch { /* ignore */ }
-      ta.remove();
-    }
-    show(`Номер ${CONTACT.phoneDisplay} скопирован. Откройте Telegram и вставьте его в поиск.`);
-  });
-
-  // видеоприветствие
-  document.getElementById('greetingBtn').addEventListener('click', () => {
-    openVideo({
-      src: './media/special/greeting.mp4',
-      poster: './media/special/greeting.webp',
-      eyebrow: 'Видеоприветствие',
-      title: 'Изабелла',
-      dir: 'Экстрасенс | Маг | Чернокнижник',
-      text: 'Опыт работы более 15 лет. Личный приём — город Шымкент.',
-      cta: { href: `https://wa.me/${CONTACT.whatsapp}` },
-    });
-  });
 }

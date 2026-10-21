@@ -154,8 +154,14 @@ if (want('special')) {
   note('всплывающее popup.mp4', 'видео', 'вступление к «Карте дня»', 'Карта дня (поп-ап)', 'media/special/card-day.mp4');
   const greet = path.join(SRC, 'приветсвие.mp4');
   ff(['-i', greet, '-vf', "scale='min(480,iw)':-2", ...x264(28), ...aac, path.join(OUT, 'special/greeting.mp4')]);
-  await poster(greet, path.join(OUT, 'special/greeting.webp'), { time: 1, width: 480 });
-  note('приветсвие.mp4', 'видео', 'видеоприветствие (назначение не подписано)', 'Hero: «Приветствие Изабеллы» (модальное окно)', 'media/special/greeting.mp4');
+  note('приветсвие.mp4', 'видео', 'видеоприветствие (назначение не подписано)', 'Видеоприветствие (блок после Hero)', 'media/special/greeting.mp4');
+}
+if (want('poster')) {
+  // Постер видеоприветствия — настоящая фотография Изабеллы (фото обо мне), вертикальный кадр 480:848 без искажений
+  mk(path.join(OUT, 'special'));
+  const w = Math.round((1440 * 480) / 848);
+  await sharp(path.join(SRC, 'фото обо мне.jpeg')).extract({ left: 150, top: 0, width: w, height: 1440 }).resize({ width: 720 }).webp({ quality: 84 }).toFile(path.join(OUT, 'special/greeting-poster.webp'));
+  note('фото обо мне.jpeg', 'фото', 'постер видеоприветствия (вертикальный кадр)', 'Видеоприветствие (блок после Hero)', 'media/special/greeting-poster.webp');
 }
 
 fs.rmSync(path.join(OUT, '_tmp'), { recursive: true, force: true });
