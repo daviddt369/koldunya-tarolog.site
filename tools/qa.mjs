@@ -161,6 +161,8 @@ console.log('\n[2] Обряды: круглые видео, звук, закры
   ok(await p.evaluate(() => [...document.querySelectorAll('.orb video')].every((v) => v.paused)), 'фоновые видеокружки приостановлены, пока открыт плеер');
   ok((await p.locator('#vmCta').isVisible()) && (await p.locator('#vmCta').getAttribute('href')).startsWith('https://wa.me/77055235378'), 'есть кнопка обращения к Изабелле');
   ok(await p.evaluate(() => document.documentElement.classList.contains('scroll-lock')), 'прокрутка страницы заблокирована');
+  const lay = await p.evaluate(() => { const v = document.getElementById('vmVideo').getBoundingClientRect(); const b = document.getElementById('vmCta').getBoundingClientRect(); const tt = document.getElementById('vmTitle').getBoundingClientRect(); const tx = document.getElementById('vmText').getBoundingClientRect(); return { gap: b.top - v.bottom, under: b.top >= v.bottom - 1 && Math.abs(b.left - v.left) < 2 && Math.abs(b.width - v.width) < 2, textAfter: innerWidth > 760 || tx.top > b.top, titleSep: tt.top > 0, ctaInInfo: !!document.getElementById('vmInfo').contains(document.getElementById('vmCta')) }; });
+  ok(lay.under && lay.gap < 4 && lay.textAfter && !lay.ctaInInfo, `кнопка «Написать Изабелле» стоит сразу под видео (зазор ${Math.round(lay.gap)} px), текст обряда идёт дальше`);
   await p.click('#videoModal .modal-close');
   await p.waitForTimeout(500);
   ok(await p.evaluate(() => document.getElementById('vmVideo').paused && !document.getElementById('vmVideo').getAttribute('src')), 'после закрытия крестиком видео остановлено');

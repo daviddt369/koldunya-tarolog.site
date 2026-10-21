@@ -514,7 +514,7 @@ a.phone-big { display: inline-block; padding: 0.3rem 0; font-size: clamp(1.8rem,
 .video-panel { display: grid; grid-template-columns: auto minmax(260px, 380px); gap: 0; background: linear-gradient(180deg, #120a0c, #080405); border: 1px solid var(--line); box-shadow: 0 40px 120px rgba(0, 0, 0, 0.9), 0 0 100px rgba(142, 18, 36, 0.3); max-width: 100%; overflow: hidden; }
 .video-panel.solo { grid-template-columns: auto; }
 .vm-media { background: #000; display: grid; place-items: center; }
-.vm-media video { display: block; max-width: min(92vw, 640px); max-height: min(88dvh, 860px); width: auto; height: auto; background: #000; }
+.vm-media video { display: block; max-width: min(92vw, 640px); max-height: min(calc(88dvh - 56px), 860px); width: auto; height: auto; background: #000; }
 .vm-info { padding: clamp(1.4rem, 3vw, 2.4rem); padding-top: 4rem; display: flex; flex-direction: column; justify-content: center; gap: 0.9rem; min-width: 0; }
 .vm-title { font-size: clamp(1.9rem, 1.4rem + 1.6vw, 2.6rem); line-height: 1.05; text-transform: uppercase; color: var(--parch); font-weight: 700; text-shadow: 0 0 30px rgba(142, 18, 36, 0.6); }
 .vm-dir { font-size: 1.3rem; font-weight: 600; color: var(--gold-hi); }
@@ -628,6 +628,7 @@ a.phone-big { display: inline-block; padding: 0.3rem 0; font-size: clamp(1.8rem,
 @media (hover: hover) and (pointer: fine) { .like-btn:hover, .mstar:hover { border-color: var(--gold); color: var(--gold-hi); } .mstar:hover { transform: scale(1.1); } }
 .like-n { min-width: 1.6ch; font-weight: 700; color: var(--parch); }
 .vm-media { display: grid; place-items: center; }
+.vm-cta { width: 100%; border-radius: 0; min-height: 56px; margin: 0; }
 .vm-like { width: 100%; padding: 0.4rem 0 0.6rem; background: #000; }
 .vm-like .rv-like { margin-top: 0; }
 
