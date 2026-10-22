@@ -111,6 +111,24 @@ console.log('\n[1d] Превью ссылок (WhatsApp / Telegram)');
   await p.context().close();
 }
 
+console.log('
+[1e] Конверсии Google Ads: клики по WhatsApp, Telegram, телефону');
+{
+  const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
+  await ctx.route(/wa\.me|t\.me/, (r) => r.abort());
+  const p = await ctx.newPage();
+  await p.addInitScript(() => sessionStorage.setItem('cardDayAutoShown', '1'));
+  await p.goto(URL_, { waitUntil: 'networkidle' });
+  await p.evaluate(() => { window.__calls = []; window.gtag = (...a) => window.__calls.push(a); });
+  const click = async (sel) => { await p.evaluate((s) => { const a = document.querySelector(s); a.addEventListener('click', (e) => e.preventDefault(), { once: true }); a.click(); }, sel); await p.waitForTimeout(900); };
+  await click('#waBtn');
+  await click('#tgBtn');
+  await click('.contact-btns a[href^="tel:"]');
+  const sends = (await p.evaluate(() => window.__calls)).map((c) => c[2].send_to);
+  ok(JSON.stringify(sends) === JSON.stringify(['AW-665734221/o_nNCJvI9aUdEM2Yub0C', 'AW-665734221/nWAECJjI9aUdEM2Yub0C', 'AW-665734221/FTkACJ7I9aUdEM2Yub0C']), 'клики WhatsApp, Telegram и телефон отправляют свои конверсии Google Ads');
+  await ctx.close();
+}
+
 console.log('\n[1c] Защита от копирования');
 {
   const p = await open(browser);

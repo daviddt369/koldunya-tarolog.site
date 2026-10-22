@@ -7,6 +7,7 @@ import { initCarousel } from './carousel.js';
 import { initCardDay } from './cardday.js';
 import { initGreeting } from './greeting.js';
 import { initRating } from './rating.js';
+import { initTracking } from './track.js';
 
 initUI();
 initAsh();
@@ -19,3 +20,4 @@ initCarousel();
 initCardDay();
 initGreeting();
 initRating();
+initTracking();

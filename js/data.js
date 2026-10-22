@@ -69,3 +69,11 @@ export const TAROT = [
 // Стартовые данные блока отзывов — цифры заказчика: средняя оценка 4,75, оценок 6 585 (за 15 лет работы).
 // Оценка посетителя прибавляется к ним (хранится в его браузере). likes: { 'photo-1': N, 'video-3': N, ... } — при желании.
 export const REVIEWS_SEED = { average: 4.75, rating: 6585, likes: {} };
+
+// Конверсии Google Ads (метки из кабинета): клики по контактам.
+export const CONVERSIONS = {
+  account: 'AW-665734221',
+  whatsapp: 'o_nNCJvI9aUdEM2Yub0C',
+  telegram: 'nWAECJjI9aUdEM2Yub0C',
+  phone: 'FTkACJ7I9aUdEM2Yub0C',
+};
