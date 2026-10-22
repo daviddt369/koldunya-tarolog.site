@@ -111,8 +111,7 @@ console.log('\n[1d] Превью ссылок (WhatsApp / Telegram)');
   await p.context().close();
 }
 
-console.log('
-[1e] Конверсии Google Ads: клики по WhatsApp, Telegram, телефону');
+console.log('\n[1e] Конверсии Google Ads: клики по WhatsApp, Telegram, телефону');
 {
   const ctx = await browser.newContext({ viewport: { width: 1280, height: 800 } });
   await ctx.route(/wa\.me|t\.me/, (r) => r.abort());
