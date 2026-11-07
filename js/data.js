@@ -70,11 +70,3 @@ export const TAROT = [
 // Оценка посетителя прибавляется к ним (хранится в его браузере). likes: { 'photo-1': N, 'video-3': N, ... } — при желании.
 export const REVIEWS_SEED = { average: 4.75, rating: 6585, likes: {} };
 
-// Конверсии Google Ads (метки из кабинета): клики по контактам.
-// Пустая метка — событие для этого контакта не отправляется.
-export const CONVERSIONS = {
-  account: 'AW-11097087187',
-  whatsapp: '3f85CL7L-rMdENO5wKsp', // «Ватсап Изабелла»
-  telegram: '70oSCMHL-rMdENO5wKsp', // «Телеграм Изабелла»
-  phone: 'tXulCOzV-LMdENO5wKsp', // «Звонок Изабелла»
-};

@@ -67,6 +67,60 @@
 
     gtag('config', 'AW-11097087187');
   </script>
+  <!-- Event snippet for Звонок Изабелла conversion page
+  In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. -->
+  <script>
+  function gtag_report_conversion_call(url) {
+    var callback = function () {
+      if (typeof(url) != 'undefined') {
+        window.location = url;
+      }
+    };
+    gtag('event', 'conversion', {
+        'send_to': 'AW-11097087187/tXulCOzV-LMdENO5wKsp',
+        'value': 1.0,
+        'currency': 'USD',
+        'event_callback': callback
+    });
+    return false;
+  }
+  </script>
+  <!-- Event snippet for Ватсап Изабелла conversion page
+  In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. -->
+  <script>
+  function gtag_report_conversion_whatsapp(url) {
+    var callback = function () {
+      if (typeof(url) != 'undefined') {
+        window.location = url;
+      }
+    };
+    gtag('event', 'conversion', {
+        'send_to': 'AW-11097087187/3f85CL7L-rMdENO5wKsp',
+        'value': 1.0,
+        'currency': 'USD',
+        'event_callback': callback
+    });
+    return false;
+  }
+  </script>
+  <!-- Event snippet for Телеграм Изабелла conversion page
+  In your html page, add the snippet and call gtag_report_conversion when someone clicks on the chosen link or button. -->
+  <script>
+  function gtag_report_conversion_telegram(url) {
+    var callback = function () {
+      if (typeof(url) != 'undefined') {
+        window.location = url;
+      }
+    };
+    gtag('event', 'conversion', {
+        'send_to': 'AW-11097087187/70oSCMHL-rMdENO5wKsp',
+        'value': 1.0,
+        'currency': 'USD',
+        'event_callback': callback
+    });
+    return false;
+  }
+  </script>
   <link rel="preload" as="font" type="font/woff2" href="./fonts/cormorant-garamond-normal-500-cyrillic.woff2" crossorigin>
   <link rel="preload" as="font" type="font/woff2" href="./fonts/ruslan-display-normal-400-cyrillic.woff2" crossorigin>
   <link rel="preload" as="font" type="font/woff2" href="./fonts/cormorant-garamond-normal-700-cyrillic.woff2" crossorigin>
@@ -112,7 +166,7 @@
       <a href="#contacts">Контакты</a>
     </nav>
     <div class="header-actions">
-      <a class="header-call" href="tel:+77055235378">+7 705 523 5378</a>
+      <a class="header-call" href="tel:+77055235378" onclick="gtag_report_conversion_call();">+7 705 523 5378</a>
       <button class="burger" id="burger" type="button" aria-expanded="false" aria-controls="mainNav" aria-label="Открыть меню"><span></span><span></span><span></span></button>
     </div>
   </header>
@@ -136,7 +190,7 @@
           <p class="hero-city" data-reveal>Город личного приёма: Шымкент</p>
           <div class="hero-cta" data-reveal>
             <a class="btn btn-blood" href="#uslugi">Подробнее об услугах</a>
-            <a class="btn btn-gold" id="heroConsult" href="https://wa.me/77055235378" target="_blank" rel="noopener">Получить консультацию</a>
+            <a class="btn btn-gold" id="heroConsult" href="https://wa.me/77055235378" target="_blank" rel="noopener" onclick="gtag_report_conversion_whatsapp();">Получить консультацию</a>
           </div>
         </div>
 
@@ -362,12 +416,12 @@
             <li><span>Специализация</span><b>Ясновидящая | Ворожея | Чернокнижник</b></li>
             <li><span>Опыт</span><b>Более 15 лет</b></li>
             <li><span>Личный приём</span><b>Город Шымкент</b></li>
-            <li><span>Телефон, WhatsApp, Telegram</span><b><a href="tel:+77055235378" class="phone-big">+7 705 523 5378</a></b></li>
+            <li><span>Телефон, WhatsApp, Telegram</span><b><a href="tel:+77055235378" class="phone-big" onclick="gtag_report_conversion_call();">+7 705 523 5378</a></b></li>
           </ul>
           <div class="contact-btns" data-reveal>
-            <a class="btn btn-wa" id="waBtn" href="https://wa.me/77055235378" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp</a>
-            <a class="btn btn-tg" id="tgBtn" href="https://t.me/+77055235378" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-tg"/></svg>Telegram</a>
-            <a class="btn btn-gold" href="tel:+77055235378"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg>Позвонить</a>
+            <a class="btn btn-wa" id="waBtn" href="https://wa.me/77055235378" target="_blank" rel="noopener" onclick="gtag_report_conversion_whatsapp();"><svg class="ico" aria-hidden="true"><use href="#i-wa"/></svg>WhatsApp</a>
+            <a class="btn btn-tg" id="tgBtn" href="https://t.me/+77055235378" target="_blank" rel="noopener" onclick="gtag_report_conversion_telegram();"><svg class="ico" aria-hidden="true"><use href="#i-tg"/></svg>Telegram</a>
+            <a class="btn btn-gold" href="tel:+77055235378" onclick="gtag_report_conversion_call();"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg>Позвонить</a>
           </div>
         </div>
       </div>
@@ -376,15 +430,15 @@
 
   <footer class="site-footer">
     <p>Изабелла · Гадалка · Любовная ведьмочка · Экстрасенс · Личный приём — Шымкент</p>
-    <p><a href="tel:+77055235378">+7 705 523 5378</a></p>
+    <p><a href="tel:+77055235378" onclick="gtag_report_conversion_call();">+7 705 523 5378</a></p>
     <p class="credit">Создание и разработка сайтов <a href="https://wa.me/77755196342" target="_blank" rel="noopener">Ai.Vazovski</a></p>
   </footer>
 
   <!-- Мобильная панель связи -->
   <nav class="dock" aria-label="Быстрая связь">
-    <a class="dock-btn dock-wa" href="https://wa.me/77055235378" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-wa"/></svg><span>WhatsApp</span></a>
-    <a class="dock-btn dock-call" href="tel:+77055235378"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg><span>Позвонить</span></a>
-    <a class="dock-btn dock-tg" href="https://t.me/+77055235378" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-tg"/></svg><span>Telegram</span></a>
+    <a class="dock-btn dock-wa" href="https://wa.me/77055235378" target="_blank" rel="noopener" onclick="gtag_report_conversion_whatsapp();"><svg class="ico" aria-hidden="true"><use href="#i-wa"/></svg><span>WhatsApp</span></a>
+    <a class="dock-btn dock-call" href="tel:+77055235378" onclick="gtag_report_conversion_call();"><svg class="ico" aria-hidden="true"><use href="#i-phone"/></svg><span>Позвонить</span></a>
+    <a class="dock-btn dock-tg" href="https://t.me/+77055235378" target="_blank" rel="noopener" onclick="gtag_report_conversion_telegram();"><svg class="ico" aria-hidden="true"><use href="#i-tg"/></svg><span>Telegram</span></a>
   </nav>
 
   <!-- ===================== МОДАЛЬНЫЕ ОКНА ===================== -->
@@ -394,7 +448,7 @@
     <div class="modal-panel video-panel" id="vmPanel">
       <button class="modal-close" type="button" data-close aria-label="Закрыть"><svg class="ico" aria-hidden="true"><use href="#i-close"/></svg></button>
       <div class="vm-media"><video id="vmVideo" playsinline controls controlslist="nodownload" preload="none"></video>
-        <a class="btn btn-gold vm-cta" id="vmCta" href="https://wa.me/77055235378" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-wa"/></svg>Написать Изабелле</a>
+        <a class="btn btn-gold vm-cta" id="vmCta" href="https://wa.me/77055235378" target="_blank" rel="noopener" onclick="gtag_report_conversion_whatsapp();"><svg class="ico" aria-hidden="true"><use href="#i-wa"/></svg>Написать Изабелле</a>
         <div class="vm-like" id="vmLikeBox" hidden></div></div>
       <div class="vm-info" id="vmInfo">
         <p class="eyebrow" id="vmEyebrow"></p>
@@ -446,7 +500,7 @@
           <h4 class="cm-name" id="cmName"></h4>
           <p class="cm-text" id="cmText"></p>
           <div class="cm-actions">
-            <a class="btn btn-gold" id="cmCta" href="https://wa.me/77055235378" target="_blank" rel="noopener"><svg class="ico" aria-hidden="true"><use href="#i-wa"/></svg>Разобрать карту с Изабеллой</a>
+            <a class="btn btn-gold" id="cmCta" href="https://wa.me/77055235378" target="_blank" rel="noopener" onclick="gtag_report_conversion_whatsapp();"><svg class="ico" aria-hidden="true"><use href="#i-wa"/></svg>Разобрать карту с Изабеллой</a>
           </div>
         </div>
       </div>
