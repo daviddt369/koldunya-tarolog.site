@@ -124,7 +124,9 @@ console.log('\n[1e] Конверсии Google Ads: клики по WhatsApp, Tel
   await click('#tgBtn');
   await click('.contact-btns a[href^="tel:"]');
   const sends = (await p.evaluate(() => window.__calls)).map((c) => c[2].send_to);
-  ok(JSON.stringify(sends) === JSON.stringify(['AW-665734221/o_nNCJvI9aUdEM2Yub0C', 'AW-665734221/nWAECJjI9aUdEM2Yub0C', 'AW-665734221/FTkACJ7I9aUdEM2Yub0C']), 'клики WhatsApp, Telegram и телефон отправляют свои конверсии Google Ads');
+  const { CONVERSIONS: C } = await import('../js/data.js');
+  const expected = ['whatsapp', 'telegram', 'phone'].filter((k) => C[k]).map((k) => `${C.account}/${C[k]}`);
+  ok(JSON.stringify(sends) === JSON.stringify(expected), `клики по контактам отправляют только заданные конверсии Google Ads (${expected.length} из 3)`);
   await ctx.close();
 }
 

@@ -1,4 +1,4 @@
-// Конверсии Google Ads: клики по WhatsApp, Telegram и телефону (метки из кабинета Google Ads, аккаунт AW-665734221).
+// Конверсии Google Ads: клики по WhatsApp, Telegram и телефону (метки из кабинета Google Ads, аккаунт задаётся в data.js).
 // Событие уходит через gtag; если тег заблокирован (блокировщик, чужой домен) — ничего не происходит, ссылки работают как обычно.
 import { CONVERSIONS } from './data.js';
 
@@ -18,7 +18,7 @@ export function initTracking() {
     const now = Date.now();
     if (last.key === k && now - last.t < 800) return; // двойной клик / click+auxclick — один раз
     last = { key: k, t: now };
-    if (typeof window.gtag !== 'function') return;
+    if (!CONVERSIONS[k] || typeof window.gtag !== 'function') return;
     window.gtag('event', 'conversion', {
       send_to: `${CONVERSIONS.account}/${CONVERSIONS[k]}`,
       value: 1.0,

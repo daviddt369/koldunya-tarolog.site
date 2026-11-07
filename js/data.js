@@ -71,9 +71,10 @@ export const TAROT = [
 export const REVIEWS_SEED = { average: 4.75, rating: 6585, likes: {} };
 
 // Конверсии Google Ads (метки из кабинета): клики по контактам.
+// Пустая метка — событие для этого контакта не отправляется.
 export const CONVERSIONS = {
-  account: 'AW-665734221',
-  whatsapp: 'o_nNCJvI9aUdEM2Yub0C',
-  telegram: 'nWAECJjI9aUdEM2Yub0C',
-  phone: 'FTkACJ7I9aUdEM2Yub0C',
+  account: 'AW-11097087187',
+  whatsapp: '',
+  telegram: '',
+  phone: '',
 };
