@@ -74,7 +74,7 @@ export const REVIEWS_SEED = { average: 4.75, rating: 6585, likes: {} };
 // Пустая метка — событие для этого контакта не отправляется.
 export const CONVERSIONS = {
   account: 'AW-11097087187',
-  whatsapp: '',
-  telegram: '',
-  phone: '',
+  whatsapp: '3f85CL7L-rMdENO5wKsp', // «Ватсап Изабелла»
+  telegram: '70oSCMHL-rMdENO5wKsp', // «Телеграм Изабелла»
+  phone: 'tXulCOzV-LMdENO5wKsp', // «Звонок Изабелла»
 };
